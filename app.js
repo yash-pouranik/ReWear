@@ -56,7 +56,7 @@ app.set("views", path.join(__dirname, "views"));
 
 
 app.get("/", (req, res) => {
-    res.render("homes/home", {title: "odoo"});
+    res.render("homes/home", {title: ".bitBros"});
 })
 
 app.listen(process.env.PORT, () => {
