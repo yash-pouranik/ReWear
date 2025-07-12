@@ -2,7 +2,7 @@ const User = require("../models/user");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const {alreadyLoggedIn} = require("../middleware.js")
+const {alreadyLoggedIn, isLoggedin} = require("../middleware.js")
 
 
 
@@ -72,6 +72,10 @@ router.get("/logout", (req,res,next) => {
     })
 })
 
+
+router.get("/dashboard/:id", isLoggedin, (req, res) => {
+    res.render("user/dashboard.ejs", {user: req.user});
+})
 
 
 
