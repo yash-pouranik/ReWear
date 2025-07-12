@@ -22,6 +22,17 @@ router.get("/", async (req, res) => {
    });
 });
 
+
+router.get("/browse", async (req, res) => {
+  let items = await Item.find({});
+  console.log(items);
+  res.render("homes/browse", { 
+    title: ".bitBros",
+    items
+   });
+});
+
+
 router.get("/item/new", isLoggedin, (req, res) => {
   res.render("homes/newItem", {title: "reWear"});
 });
