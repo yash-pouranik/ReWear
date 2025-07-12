@@ -1,25 +1,142 @@
 <% layout('layout/boilerPlate') -%>
-  <style>
-    .card {
-      padding: 20px;
-      max-width: 500px;
-      border-radius: 10px;
-      margin-top:3rem;
-      box-shadow: 0 0 10px #ccc;
-    }
-  </style>
 
-<body>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+  .card {
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 10px #ccc;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    color: #333;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .li {
+    margin: 8px 0;
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 6px;
+  }
+
+  .tag {
+    background: #e0e0e0;
+    font-size: 0.85rem;
+    padding: 3px 8px;
+    border-radius: 5px;
+    margin-left: 8px;
+  }
+
+  .status {
+    float: right;
+    font-size: 0.85rem;
+    color: #555;
+  }
+
+  .btn-logout {
+    margin-top: 15px;
+    background: #d32f2f;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+a{
+  text-decoration: none;
+}
+  .btn-logout:hover {
+    opacity: 0.9;
+  }
+</style>
+
+<div class="container">
+
+  <!-- 👤 User Info -->
   <div class="card">
     <h2>Welcome, <%= user.username %> 👋</h2>
-
     <p><strong>Email:</strong> <%= user.email %></p>
     <p><strong>Points:</strong> <%= user.points %></p>
     <p><strong>Joined On:</strong> <%= user.createdAt.toDateString() %></p>
 
     <form action="/logout" method="POST">
-      <button type="submit">Logout</button>
+      <button type="submit" class="btn-logout">Logout</button>
     </form>
   </div>
-</body>
-</html>
+
+  <!-- 📦 Uploaded Items -->
+  <div class="card">
+    <div class="section-title">📦 Your Uploaded Items</div>
+    <% if (uploadedItems.length === 0) { %>
+      <p>No items uploaded yet.</p>
+    <% } else { %>
+      <ul>
+        <% uploadedItems.forEach(item => { %>
+          <a href="/items/<%= item._id %>">
+            <li class="li">
+              <strong><%= item.title %></strong>
+              <span class="status">[<%= item.status %>]</span>
+              
+            </li>
+          </a>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <!-- 🔁 Ongoing Swaps -->
+  <div class="card">
+    <div class="section-title">🔁 Ongoing Swaps</div>
+    <% if (ongoingSwaps.length === 0) { %>
+      <p>No ongoing swaps.</p>
+    <% } else { %>
+      <ul>
+        <% ongoingSwaps.forEach(swap => { %>
+          <li class="li">
+            <strong><%= swap.item.title %></strong>
+            <span class="status">Status: <%= swap.status %></span>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <!-- ✅ Completed Swaps -->
+  <div class="card">
+    <div class="section-title">✅ Completed Swaps</div>
+    <% if (completedSwaps.length === 0) { %>
+      <p>No completed swaps.</p>
+    <% } else { %>
+      <ul>
+        <% completedSwaps.forEach(swap => { %>
+          <li class="li">
+            <strong><%= swap.item.title %></strong>
+            <span class="status">Completed</span>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+</div>
