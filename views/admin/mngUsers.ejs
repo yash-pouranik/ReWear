@@ -1,0 +1,49 @@
+<% layout('layout/boilerPlate') -%>
+
+<div class="container my-5">
+  <h2 class="text-center mb-4">👨‍💼 Admin Panel - Manage Users</h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Points</th>
+          <th>isAdmin</th>
+          <th>Joined On</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach((user, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= user.username %></td>
+            <td><%= user.email %></td>
+            <td><%= user.points %></td>
+            <td>
+              <span class="badge <%= user.isAdmin ? 'bg-success' : 'bg-secondary' %>">
+                <%= user.isAdmin ? 'Yes' : 'No' %>
+              </span>
+            </td>
+            <td><%= user.createdAt.toDateString() %></td>
+            <td>
+              <div class="d-flex gap-2 justify-content-center">
+                <form method="POST" action="/admin/<%= user._id %>/toggleAdmin?_method=PUT">
+                  <button class="btn btn-sm <%= user.isAdmin ? 'btn-warning' : 'btn-success' %>">
+                    <%= user.isAdmin ? 'Revoke Admin' : 'Make Admin' %>
+                  </button>
+                </form>
+                <form method="POST" action="/admin/<%= user._id %>?_method=DELETE" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                  <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

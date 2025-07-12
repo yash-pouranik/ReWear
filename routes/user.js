@@ -222,7 +222,19 @@ router.post("/swap/:id/reject", isLoggedin, async (req, res) => {
 
 
 
+//admin
 
+const { isAdmin } = require("../middleware");
+
+router.get("/admin/:id", isAdmin, async (req, res) => {
+  const { id } = req.params;
+  const users = await User.find({});
+  if (!user) {
+    req.flash("error", "User not found.");
+    return res.redirect("/");
+  }
+  res.render("admin/mngUsers", { users }); // Render admin dashboard or similar
+});
 
 
 module.exports = router;

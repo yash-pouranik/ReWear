@@ -37,3 +37,12 @@ module.exports.alreadyLoggedIn = (req, res, next) => {
         res.redirect("/");
     }
 }
+
+
+module.exports.isAdmin = (req, res, next) => {
+  if (!req.isAuthenticated() || !req.user.isAdmin) {
+    req.flash("error", "Admin access only.");
+    return res.redirect("/");
+  }
+  next();
+};
