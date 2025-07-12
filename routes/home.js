@@ -68,7 +68,6 @@ router.get("/items/:id", async (req, res) => {
     console.error(err);
     res.send("Error loading item");
   }
-
 });
 
 
