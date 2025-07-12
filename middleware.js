@@ -24,7 +24,7 @@ module.exports.isLoggedin = (req, res, next) => {
         console.log(req.path)
         console.log("Not logged in!");
         req.flash("error", "you must be logged in.");
-        return res.redirect("/login");
+        return res.redirect("/auth/login");
     }
     next();
 };
