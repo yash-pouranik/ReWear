@@ -6,4 +6,10 @@ router.get("/", (req, res) => {
   res.render("homes/home", { title: ".bitBros" });
 });
 
+router.get("/new", (req, res) => {
+  res.send("Add new listing");
+});
+
+
+
 module.exports = router;
