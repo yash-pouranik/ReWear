@@ -1,0 +1,110 @@
+<% layout('layout/boilerPlate') -%>
+
+<style>
+  .form-wrapper {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0 3rem 0;
+  }
+
+  .form-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .form-card h2 {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+</style>
+
+<div class="form-wrapper">
+  <div class="form-card">
+    <h2>Add New Item</h2>
+    
+    <form method="POST" action="/items/new" enctype="multipart/form-data" class="needs-validation" novalidate>
+      
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" id="title" required>
+        <div class="invalid-feedback">Please enter a title.</div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea name="description" class="form-control" id="description" rows="3" required></textarea>
+        <div class="invalid-feedback">Please enter a description.</div>
+      </div>
+
+      <!-- Category -->
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select name="category" class="form-select" id="category" required>
+          <option value="">Choose category</option>
+          <option value="Tops">Tops</option>
+          <option value="Bottoms">Bottoms</option>
+          <option value="Dresses">Dresses</option>
+          <option value="Ethnic Wear">Ethnic Wear</option>
+          <option value="Footwear">Footwear</option>
+          <option value="Outerwear">Outerwear</option>
+          <option value="Others">Others</option>
+        </select>
+        <div class="invalid-feedback">Please select a category.</div>
+      </div>
+
+      <!-- Buy Type -->
+      <div class="mb-3">
+        <label for="buyType" class="form-label">Available For</label>
+        <select name="buyType" class="form-select" id="buyType" required>
+          <option value="">Choose option</option>
+          <option value="swap">Swap</option>
+          <option value="points">Points</option>
+          <option value="both">Both</option>
+        </select>
+        <div class="invalid-feedback">Please select a buy type.</div>
+      </div>
+
+      <!-- Tags -->
+      <div class="mb-3">
+        <label for="tags" class="form-label">Tags (comma separated)</label>
+        <input type="text" name="tags" class="form-control" id="tags">
+      </div>
+
+      <!-- Images -->
+      <div class="mb-3">
+        <label for="images" class="form-label">Upload Images</label>
+        <input type="file" name="images" class="form-control" id="images" accept="image/*" multiple required>
+        <div class="invalid-feedback">Please upload at least one image.</div>
+      </div>
+
+      <button type="submit" class="btn btn-dark w-100 mt-3">Submit Item</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Bootstrap form validation
+  (() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>

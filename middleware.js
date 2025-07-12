@@ -1,3 +1,23 @@
+const multer = require("multer");
+const path = require("path");
+
+// Local storage setup (you can switch to Cloudinary later)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
+
+module.exports = upload;
+
+
+
 module.exports.isLoggedin = (req, res, next) => {
     if(!req.isAuthenticated()) {
         req.session.redirect = req.originalUrl;
