@@ -1,0 +1,81 @@
+<% layout('layout/boilerPlate') -%>
+
+<style>
+  .form-wrapper {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .form-card h2 {
+    margin-bottom: 1.5rem;
+    font-family: 'Manrope', sans-serif;
+  }
+
+  label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+</style>
+
+<div class="form-wrapper">
+  <div class="form-card">
+    <h2 class="text-center">Edit User</h2>
+
+    <form method="POST" action="/admin/<%= user._id %>?_method=PUT" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="username" value="<%= user.username %>" required>
+        <div class="invalid-feedback">
+          Please enter username.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" name="email" class="form-control" id="email" value="<%= user.email %>" required>
+        <div class="invalid-feedback">
+          Please enter valid email.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="points" class="form-label">Points</label>
+        <input type="number" name="points" class="form-control" id="points" value="<%= user.points %>" required>
+        <div class="invalid-feedback">
+          Please enter points.
+        </div>
+      </div>
+
+      
+
+      <button type="submit" class="btn btn-dark w-100 mt-3">Update</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  (() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>

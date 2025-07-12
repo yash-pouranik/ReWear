@@ -74,7 +74,8 @@ router.get("/logout", (req,res,next) => {
 
 router.get("/dashboard/:id", isLoggedin, async(req, res) => {
    try {
-    const user = req.user;
+    const uId = req.params.id;
+    const user = await User.findById(uId);
 
     // 1. Uploaded items by this user
     const uploadedItems = await Item.find({ uploader: user._id });
@@ -229,12 +230,55 @@ const { isAdmin } = require("../middleware");
 router.get("/admin/:id", isAdmin, async (req, res) => {
   const { id } = req.params;
   const users = await User.find({});
-  if (!user) {
+  if (!users) {
     req.flash("error", "User not found.");
     return res.redirect("/");
   }
-  res.render("admin/mngUsers", { users }); // Render admin dashboard or similar
+  res.render("admin/mngUsers", { users, title: "admin" }); // Render admin dashboard or similar
 });
+
+
+
+
+
+// 📝 Show Edit Form
+router.get("/admin/:id/edit", isAdmin, async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    req.flash("error", "User not found.");
+    return res.redirect("/admin");
+  }
+  res.render("admin/editUser", { user,title: "admin"  });
+});
+
+// ✅ Handle Edit Form Submission (Update User)
+router.put("/admin/:id", isAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { username, email, points, isAdmin } = req.body;
+
+  await User.findByIdAndUpdate(id, {
+    username,
+    email,
+    points,
+     // checkbox returns "on" if checked
+  });
+
+  req.flash("success", "User updated successfully.");
+  res.redirect("/admin/" + id);
+});
+
+// 🗑️ Delete User
+router.delete("/admin/:id", isAdmin, async (req, res) => {
+  const { id } = req.params;
+  await User.findByIdAndDelete(id);
+  req.flash("success", "User deleted successfully.");
+  res.redirect("back");
+});
+
+module.exports = router;
+
+
 
 
 module.exports = router;

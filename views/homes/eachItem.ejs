@@ -166,8 +166,8 @@
 
 
   <div class="action-buttons">
-    <!-- 📝 Edit/Delete Buttons for Uploader -->
-    <% if (currUser && currUser.username === item.uploader.username) { %>
+    <!-- 📝 Edit/Delete Butto ns for Uploader -->
+    <% if (currUser && currUser.isAdmin === true || currUser.username === item.uploader.username ) { %>
       <form action="/items/<%= item._id %>/edit" method="GET">
         <button class="btn btn-edit" type="submit">Edit</button>
       </form>

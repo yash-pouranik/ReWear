@@ -17,7 +17,7 @@ const userSchema = new Schema({
         type: Number,
         default: 100,
     },
-    sAdmin: {
+    isAdmin: {
     type: Boolean,
     default: false,
   },
