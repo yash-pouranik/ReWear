@@ -134,7 +134,7 @@ router.post("/items/:id/redeem", isLoggedin, async (req, res) => {
   item.status = "swapped";
   await item.save();
 
-  res.redirect("/user/dashboard");
+  res.redirect(`/dashboard/${buyer._id}`);
 });
 
 
