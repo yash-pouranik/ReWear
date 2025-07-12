@@ -74,7 +74,7 @@ router.get("/logout", (req,res,next) => {
 
 
 router.get("/dashboard/:id", isLoggedin, (req, res) => {
-    res.render("user/dashboard.ejs", {user: req.user});
+    res.render("user/dashboard.ejs", {user: req.user, title: req.user.username});
 })
 
 
