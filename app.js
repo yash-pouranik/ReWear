@@ -25,8 +25,18 @@ const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 
 
+//Collections
+const User = require("./models/user");
+
+
+//requiring routes
+const homeRoutes = require("./routes/home");
+const userRoutes = require("./routes/user");
+
+const dbUrl = process.env.DBURL;
+
 async function main () {
-    await mongoose.connect("mongodb://127.0.0.1:27017/oddo_Hackathon_25");
+    await mongoose.connect(dbUrl);
 }
 main()
 .then(() => {
@@ -53,12 +63,61 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 
+//setting session
+const sessionConfig = {
+  store: MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 3600 // 1 day
+  }),
+  secret: process.env.SESSION_SECRET || "thisisnotagoodsecret",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
+};
+
+app.use(session(sessionConfig));
 
 
-app.get("/", (req, res) => {
-    res.render("homes/home", {title: ".bitBros"});
-})
 
-app.listen(process.env.PORT, () => {
+//setting up passport
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+
+// res. locals
+app.use((req, res, next) => {
+  res.locals.currUser = req.user;
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
+
+
+
+//adding routes
+app.use("/", homeRoutes); // mount at root
+app.use("/", userRoutes);
+
+
+
+
+app.use((req, res) => {
+  res.status(404).render("error/defaultError", { title: "Page Not Found" });
+});
+
+
+
+
+app.listen(process.env.PORT || 3000, () => {
     console.log("listening on port");
 })

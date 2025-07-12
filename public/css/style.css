@@ -1,26 +1,28 @@
 body{
-    background-color: #F9FBFC;
+    background-color: #f9fbfc !important;
 
 }
 
-h1, h2, h3, h4, button {
+h1, h2, h3, h4, button, label {
   font-family: 'Manrope', sans-serif !important;
 }
 
 body, p, li, a {
   font-family: 'Public Sans', sans-serif !important;
 }
-
-button{
-  background-color: #00B7C2 !important;
+button {
+  background: linear-gradient(to right, #0044ab 50%, #0066ff 50%) !important;
+  background-size: 200% 100% !important;
+  background-position: right bottom !important;
+  color: white !important;
   padding: 0.5rem !important;
   border: none !important;
   border-radius: 10px !important;
   margin: 0.3rem !important;
-  font-size: 1.2rem;
-
+  font-size: 1.2rem !important;
+  transition: background-position 0.4s ease-in-out !important;
 }
 
-button:hover{
-  background-color: #0099a6 !important;
+button:hover {
+  background-position: left bottom !important;
 }

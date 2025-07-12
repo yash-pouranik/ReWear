@@ -7,11 +7,24 @@
     color: white !important;
     font-size: 1.4rem;
   }
+  .nav-link.username {
+    font-weight: 600;
+    background-color: #3e37ff;
+    color: white !important;
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    margin-left: 1rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .nav-link.username:hover {
+    background-color: #0600b2;
+  }
 </style>
 
 <nav class="navbar navbar-expand-md navbar-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#" style="padding-left: 1.5rem;">.bitBros</a>
+    <a class="navbar-brand" href="/" style="padding-left: 1.5rem;">.bitBros</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -19,14 +32,30 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
+        <% if(!currUser) { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/signup">Signup</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/login">Login</a>
+          </li>
+        <% } else{%>
+          <li class="nav-item">
+            <a class="nav-link username" href="/dashboard"><%= currUser.username %></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/browse">Browse</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/features">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">logout</a>
+          </li>
+          
+        <% } %>
         
       </ul>
     </div>
