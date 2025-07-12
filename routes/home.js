@@ -50,6 +50,12 @@ router.post("/items/new", isLoggedin, upload.array("images", 5), async (req, res
   }
 });
 
+router.delete("/delete/item/:id", async (req, res) => {
+  const { id } = req.params;
+  await Item.findByIdAndDelete(id);
+  req.flash("success", "Item deleted successfully!");
+  res.redirect("/");
+});
 
 
 module.exports = router;
