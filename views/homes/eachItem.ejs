@@ -132,12 +132,15 @@
       <% }) %>
     </p>
 
-    <% if (item.status === 'swapped') { %>
+    <% if (item.status === 'approved') { %>
+      <div class="alert alert-success" role="alert">
+         Available.
+      </div>
+    <% } else if (item.status === 'swapped') { %>
       <div class="alert alert-warning" role="alert">
         ⚠️ This item is already booked.
       </div>
     <% } else if (item.status !== 'approved') {  %>
-
       <div class="alert alert-warning" role="alert">
         ⚠️ This item is not approved yet. You should avoid buying it.
       </div>
