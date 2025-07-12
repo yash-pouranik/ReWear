@@ -3,9 +3,8 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const {alreadyLoggedIn, isLoggedin} = require("../middleware.js")
-
-
-
+const Item=require("../models/item");
+const SwapRequest=require("../models/SwapRequest");
 
 router.get("/auth/signup", alreadyLoggedIn, (req, res) => {
     res.render("user/signup", {title: "SignUP"});
@@ -73,8 +72,33 @@ router.get("/logout", (req,res,next) => {
 })
 
 
-router.get("/dashboard/:id", isLoggedin, (req, res) => {
-    res.render("user/dashboard.ejs", {user: req.user, title: req.user.username});
+router.get("/dashboard/:id", isLoggedin, async(req, res) => {
+   try {
+    const user = req.user;
+
+    // 1. Uploaded items by this user
+    const uploadedItems = await Item.find({ uploader: user._id });
+
+    // 2. SwapRequests where user is requester
+    const swaps = await SwapRequest.find({ requester: user._id })
+      .populate("item")
+      .sort({ createdAt: -1 });
+
+    const ongoingSwaps = swaps.filter(s => s.status === "pending" || s.status === "accepted");
+    const completedSwaps = swaps.filter(s => s.status === "completed");
+
+    res.render("user/dashboard", {
+      user,
+      uploadedItems,
+      ongoingSwaps,
+      completedSwaps,
+      title: req.user.username
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.send("Error loading dashboard");
+  }
 })
 
 
