@@ -74,6 +74,7 @@ router.get("/items/:id/edit", isLoggedin, async (req, res) => {
   res.render("homes/editItem", { item, title: "Edit Item" });
 });
 
+
 router.put("/items/:id/edit", isLoggedin, upload.array("images", 5), async (req, res) => {
   try {
     const { id } = req.params;
@@ -89,7 +90,7 @@ router.put("/items/:id/edit", isLoggedin, upload.array("images", 5), async (req,
       return res.redirect("/");
     }
 
-    const { title, description, category, buyType, tags } = req.body;
+    const { title, description, category, buyType, tags, status } = req.body;
 
     // Update fields
     item.title = title;
@@ -97,6 +98,7 @@ router.put("/items/:id/edit", isLoggedin, upload.array("images", 5), async (req,
     item.category = category;
     item.buyType = buyType;
     item.tags = tags.split(",").map(tag => tag.trim());
+    item.status = status;  // ✅ Add this line
 
     // Handle new images (optional)
     if (req.files && req.files.length > 0) {
@@ -112,6 +114,7 @@ router.put("/items/:id/edit", isLoggedin, upload.array("images", 5), async (req,
     res.redirect("/");
   }
 });
+
 
 
 
