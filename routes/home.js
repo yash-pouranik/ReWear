@@ -56,6 +56,7 @@ router.delete("/delete/item/:id", async (req, res) => {
   await Item.findByIdAndDelete(id);
   req.flash("success", "Item deleted successfully!");
   res.redirect("/");
+})
 
 router.get("/items/:id", async (req, res) => {
   try {
