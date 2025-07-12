@@ -1,15 +1,324 @@
 <% layout('layout/boilerPlate') -%>
 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ReWear - Swap Your Style</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f2fa;
+    }
+
+ header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 4px 0;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        margin-top: 10px;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      header {
+        align-items: flex-start;
+      }
+    }
+
+    nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1520975698519-59fbbd42ec98') center/cover no-repeat;
+      color: white;
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .hero h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+
+    .hero .btn {
+      padding: 12px 25px;
+      background: #e67e22;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 10px;
+      font-weight: 600;
+    }
+
+    .section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .section h3 {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      max-width: 250px;
+    }
+
+    .featured-items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .item-card {
+      width: 220px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: left;
+      background-color: white;
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .item-card .content {
+      padding: 10px;
+    }
+
+    .item-card h4 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .footer a {
+      color: #f39c12;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    .shopping-visual-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      background-color: #eee6ff;
+      flex-wrap: wrap;
+    }
+
+    .mockup-box {
+      background-color: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 1000px;
+      width: 100%;
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mockup-image {
+      flex: 1;
+      min-width: 280px;
+      text-align: center;
+    }
+
+    .mockup-image img {
+      width: 100%;
+      max-width: 450px;
+      border-radius: 10px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .mockup-text {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .mockup-text h2 {
+      font-size: 32px;
+      color: #6C63FF;
+      margin-bottom: 20px;
+    }
+
+    .mockup-text p {
+      font-size: 18px;
+      color: #444;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      background-color: #6C63FF;
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      display: inline-block;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #4e48d4;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mockup-box {
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .mockup-text {
+        text-align: center;
+      }
+
+     
+
+      nav a {
+        margin: 5px;
+      }
+    }
+  </style>
+
+
+ 
+
+  <section class="shopping-visual-section" style="background-color: none !important;">
+    <div class="mockup-box">
+      <div class="mockup-image">
+        <img src="assets/homeImg.png" alt="Shopping Illustration" />
+      </div>
+      <div class="mockup-text">
+        <h2>Explore & Swap</h2>
+        <p>Browse items listed by fellow eco-conscious users and request a swap directly. Whether it's vintage denim or cozy tees, ReWear lets you refresh your wardrobe without hurting the planet.</p>
+        <a href="/" class="btn">Browse Items</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h3>How It Works</h3>
+    <div class="steps">
+      <div class="step">
+        <h4>1. Sign Up</h4>
+        <p>Create your free account and set up your profile.</p>
+      </div>
+      <div class="step">
+        <h4>2. List Items</h4>
+        <p>Upload photos of your unused clothes with details.</p>
+      </div>
+      <div class="step">
+        <h4>3. Swap & Earn</h4>
+        <p>Get points or direct swap requests. Simple & sustainable!</p>
+      </div>
+    </div>
+  </section>
+
+
+
 <h1 class="text-center my-4">Featured Items</h1>
 
+
 <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
-  <% for (let item of items) { %>
+  <% for (let i = 0; i < 3 && i < items.length; i++) { %>
     <div style="border: 1px solid #ccc; border-radius: 10px; padding: 1rem; width: 280px;">
-      <img src="<%= item.images[0] %>" alt="Item Image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
-      <h5 class="mt-2"><%= item.title %></h5>
-      <p><%= item.category %> | <%= item.buyType %></p>
-      <p><%= item.description.substring(0, 80) %>...</p>
-      <a href="/items/<%= item._id %>" class="btn btn-sm btn-primary">View Details</a>
+      <img src="<%= items[i].images[0] %>" alt="Item Image" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+      <h5 class="mt-2"><%= items[i].title %></h5>
+      <p><%= items[i].category %> | <%= items[i].buyType %></p>
+      <p><%= items[i].description.substring(0, 80) %>...</p>
+      <a href="/items/<%= items[i]._id %>" class="btn btn-sm btn-primary">View Details</a>
     </div>
   <% } %>
 </div>

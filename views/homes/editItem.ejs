@@ -28,21 +28,21 @@
 
 <div class="form-wrapper">
   <div class="form-card">
-    <h2>Add New Item</h2>
+    <h2>Edit Item</h2>
     
-    <form method="POST" action="/items/new" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <form method="POST" action="/items/<%= item._id %>/edit?_method=PUT" enctype="multipart/form-data" class="needs-validation" novalidate>
       
       <!-- Title -->
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
-        <input type="text" name="title" class="form-control" id="title" required>
+        <input type="text" name="title" class="form-control" id="title" value="<%= item.title %>" required>
         <div class="invalid-feedback">Please enter a title.</div>
       </div>
 
       <!-- Description -->
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea name="description" class="form-control" id="description" rows="3" required></textarea>
+        <textarea name="description" class="form-control" id="description" rows="3" required><%= item.description %></textarea>
         <div class="invalid-feedback">Please enter a description.</div>
       </div>
 
@@ -51,13 +51,9 @@
         <label for="category" class="form-label">Category</label>
         <select name="category" class="form-select" id="category" required>
           <option value="">Choose category</option>
-          <option value="Tops">Tops</option>
-          <option value="Bottoms">Bottoms</option>
-          <option value="Dresses">Dresses</option>
-          <option value="Ethnic Wear">Ethnic Wear</option>
-          <option value="Footwear">Footwear</option>
-          <option value="Outerwear">Outerwear</option>
-          <option value="Others">Others</option>
+          <% ["Tops", "Bottoms", "Dresses", "Ethnic Wear", "Footwear", "Outerwear", "Others"].forEach(cat => { %>
+            <option value="<%= cat %>" <%= item.category === cat ? "selected" : "" %>><%= cat %></option>
+          <% }) %>
         </select>
         <div class="invalid-feedback">Please select a category.</div>
       </div>
@@ -67,9 +63,9 @@
         <label for="buyType" class="form-label">Available For</label>
         <select name="buyType" class="form-select" id="buyType" required>
           <option value="">Choose option</option>
-          <option value="swap">Swap</option>
-          <option value="points">Points</option>
-          <option value="both">Both</option>
+          <% ["swap", "points", "both"].forEach(type => { %>
+            <option value="<%= type %>" <%= item.buyType === type ? "selected" : "" %>><%= type %></option>
+          <% }) %>
         </select>
         <div class="invalid-feedback">Please select a buy type.</div>
       </div>
@@ -77,17 +73,17 @@
       <!-- Tags -->
       <div class="mb-3">
         <label for="tags" class="form-label">Tags (comma separated)</label>
-        <input type="text" name="tags" class="form-control" id="tags">
+        <input type="text" name="tags" class="form-control" id="tags" value="<%= item.tags.join(', ') %>">
       </div>
 
       <!-- Images -->
       <div class="mb-3">
-        <label for="images" class="form-label">Upload Images</label>
-        <input type="file" name="images" class="form-control" id="images" accept="image/*" multiple required>
-        <div class="invalid-feedback">Please upload at least one image.</div>
+        <label for="images" class="form-label">Upload New Images (optional)</label>
+        <input type="file" name="images" class="form-control" id="images" accept="image/*" multiple>
+        <div class="form-text">Uploading new images will replace the old ones.</div>
       </div>
 
-      <button type="submit" class="btn btn-dark w-100 mt-3">Submit Item</button>
+      <button type="submit" class="btn btn-dark w-100 mt-3">Update Item</button>
     </form>
   </div>
 </div>

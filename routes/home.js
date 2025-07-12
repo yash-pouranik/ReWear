@@ -63,6 +63,45 @@ router.get("/items/:id/edit", isLoggedin, async (req, res) => {
   res.render("homes/editItem", { item, title: "Edit Item" });
 });
 
+router.put("/items/:id/edit", isLoggedin, upload.array("images", 5), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const item = await Item.findById(id);
+    if (!item) {
+      req.flash("error", "Item not found");
+      return res.redirect("/");
+    }
+
+    // Permission check
+    if (!item.uploader.equals(req.user._id)) {
+      req.flash("error", "Unauthorized");
+      return res.redirect("/");
+    }
+
+    const { title, description, category, buyType, tags } = req.body;
+
+    // Update fields
+    item.title = title;
+    item.description = description;
+    item.category = category;
+    item.buyType = buyType;
+    item.tags = tags.split(",").map(tag => tag.trim());
+
+    // Handle new images (optional)
+    if (req.files && req.files.length > 0) {
+      item.images = req.files.map(f => `/uploads/${f.filename}`);
+    }
+
+    await item.save();
+    req.flash("success", "Item updated successfully!");
+    res.redirect(`/items/${id}`);
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Update failed.");
+    res.redirect("/");
+  }
+});
+
 
 
 
