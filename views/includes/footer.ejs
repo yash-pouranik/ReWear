@@ -1,37 +1,43 @@
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
 
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
- 
-  <style>
-    body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+  main {
+    flex: 1;
+  }
 
-main {
-  flex: 1; /* This pushes footer to bottom if content is less */
-}
+  footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #1B262C;
+    height: 10rem;
+    padding: 5rem;
+    color: white;
+    margin-top: 5rem; /* 👈 this keeps footer at bottom */
+  }
+</style>
 
-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  background-color: #1B262C;
-  height: 10rem;
-  color: white;
-  margin-top: 3rem;
-}
+<main>
+  <!-- your page content -->
+</main>
 
-  </style>
-
-  <footer>
-    <div class="footer-child">
-      <span>.bitBros</span>
-      <span>
-        <span>Privacy</span>
-        <span>Terms</span>
-      </span>
-      <span>All copyrights Reserved @.bitBros</span>
-    </div>
-  </footer>
+<footer>
+  <div class="footer-child">
+    <span>.bitBros</span>
+    <span>
+      <span>Privacy</span>
+      <span>Terms</span>
+    </span>
+    <span>All copyrights Reserved @.bitBros</span>
+  </div>
+</footer>

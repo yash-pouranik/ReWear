@@ -12,8 +12,13 @@ const { isLoggedin } = middleware; // named export
 
 
 // GET /
-router.get("/", (req, res) => {
-  res.render("homes/home", { title: ".bitBros" });
+router.get("/", async (req, res) => {
+  let items = await Item.find({});
+  console.log(items);
+  res.render("homes/home", { 
+    title: ".bitBros",
+    items
+   });
 });
 
 router.get("/item/new", (req, res) => {
