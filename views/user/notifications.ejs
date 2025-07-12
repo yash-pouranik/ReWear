@@ -1,0 +1,83 @@
+<% layout("layout/boilerPlate") -%>
+
+<style>
+  .card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .noti-card {
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+  }
+
+  .noti-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+
+  .noti-card h4 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .noti-card small {
+    color: #666;
+  }
+
+  .btn-group {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .btn-accept {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .btn-reject {
+    background-color: #e53935;
+    color: white;
+  }
+</style>
+
+<h2>🔔 Swap Requests</h2>
+
+<% if (requests.length === 0) { %>
+  <p>No new swap requests.</p>
+<% } else { %>
+  <div class="card-container">
+    <% requests.forEach(req => { %>
+      <div class="noti-card">
+        <h4><%= req.requester.username %> requested your item: <em>“<%= req.item.title %>”</em></h4>
+        <p><small>Email:</small> <%= req.requester.email %></p>
+        <p><small>Requested At:</small> <%= req.createdAt.toLocaleString() %></p>
+
+        <div class="btn-group">
+          <form action="/swap/<%= req._id %>/accept" method="POST">
+            <button class="btn btn-accept" type="submit">✅ Accept</button>
+          </form>
+
+          <form action="/swap/<%= req._id %>/reject" method="POST">
+            <button class="btn btn-reject" type="submit">❌ Reject</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>

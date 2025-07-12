@@ -4,7 +4,7 @@ const router = express.Router();
 const passport = require("passport");
 const {alreadyLoggedIn, isLoggedin} = require("../middleware.js")
 const Item=require("../models/item");
-const SwapRequest=require("../models/SwapRequest");
+const SwapRequest=require("../models/SwapRequest.js");
 
 router.get("/auth/signup", alreadyLoggedIn, (req, res) => {
     res.render("user/signup", {title: "SignUP"});
@@ -100,6 +100,124 @@ router.get("/dashboard/:id", isLoggedin, async(req, res) => {
     res.send("Error loading dashboard");
   }
 })
+
+
+
+
+router.post("/items/:id/redeem", isLoggedin, async (req, res) => {
+  const item = await Item.findById(req.params.id).populate("uploader");
+  const buyer = req.user;
+
+  if (item.status !== "approved") {
+    return res.send("Item not available for redemption.");
+  }
+
+  if (item.buyType === "swap") {
+    return res.send("This item can only be swapped, not bought.");
+  }
+
+  if (buyer.points < 50) {
+    return res.send("You don't have enough points.");
+  }
+
+  // 10 points = 1 item logic
+  buyer.points -= 50;
+  await buyer.save();
+
+  // Credit uploader (optional)
+  item.uploader.points += 50;
+  await item.uploader.save();
+
+  // Update item
+  item.status = "swapped";
+  await item.save();
+
+  res.redirect("/dashboard");
+});
+
+
+
+router.get("/notifications", isLoggedin, async (req, res) => {
+  try {
+    const requests = await SwapRequest.find({
+      owner: req.user._id,
+      status: "pending"
+    })
+      .populate("requester")
+      .populate("item")
+      .sort({ createdAt: -1 });
+
+    res.render("user/notifications", {
+      title: "Notifications",
+      requests
+    });
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Failed to load notifications.");
+    res.redirect("user/dashboard");
+  }
+});
+
+
+// POST /swap/:id/accept
+router.post("/swap/:id/accept", isLoggedin, async (req, res) => {
+  try {
+    const swap = await SwapRequest.findById(req.params.id).populate("item");
+    if (!swap) {
+      req.flash("error", "Swap request not found.");
+      return res.redirect("/notifications");
+    }
+
+    if (!swap.owner.equals(req.user._id)) {
+      req.flash("error", "Unauthorized action.");
+      return res.redirect("/notifications");
+    }
+
+    // mark as accepted
+    swap.status = "accepted";
+    await swap.save();
+
+    // optional: mark item as 'swapped'
+    swap.item.status = "swapped";
+    await swap.item.save();
+
+    req.flash("success", "Swap request accepted.");
+    res.redirect("/notifications");
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong.");
+    res.redirect("/");
+  }
+});
+
+
+
+// POST /swap/:id/reject
+router.post("/swap/:id/reject", isLoggedin, async (req, res) => {
+  try {
+    const swap = await SwapRequest.findById(req.params.id);
+    if (!swap) {
+      req.flash("error", "Swap request not found.");
+      return res.redirect("/notifications");
+    }
+
+    if (!swap.owner.equals(req.user._id)) {
+      req.flash("error", "Unauthorized action.");
+      return res.redirect("/notifications");
+    }
+
+    swap.status = "rejected";
+    await swap.save();
+
+    req.flash("info", "Swap request rejected.");
+    res.redirect("/");
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong.");
+    res.redirect("/notification");
+  }
+});
+
 
 
 

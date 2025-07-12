@@ -80,7 +80,7 @@ a{
     <p><strong>Points:</strong> <%= user.points %></p>
     <p><strong>Joined On:</strong> <%= user.createdAt.toDateString() %></p>
 
-    <form action="/logout" method="POST">
+    <form action="/logout" method="get">
       <button type="submit" class="btn-logout">Logout</button>
     </form>
   </div>
@@ -113,10 +113,12 @@ a{
     <% } else { %>
       <ul>
         <% ongoingSwaps.forEach(swap => { %>
-          <li class="li">
-            <strong><%= swap.item.title %></strong>
-            <span class="status">Status: <%= swap.status %></span>
-          </li>
+          <a href="/items/<%= swap.item._id %>">
+            <li class="li">
+              <strong><%= swap.item.title %></strong>
+              <span class="status">Status: <%= swap.status %></span>
+            </li>
+        </a>
         <% }) %>
       </ul>
     <% } %>

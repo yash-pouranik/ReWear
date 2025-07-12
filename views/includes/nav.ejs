@@ -105,7 +105,14 @@
   <nav id="nav-links">
     <a href="/">Home</a>
     <a href="/item/new">Add New Item</a>
-    <a class="btn" href="/dashboard/<%= currUser._id %>"><%= currUser.username %></a>
+    <% if(currUser) {%>
+      <a class="btn" href="/dashboard/<%= currUser._id %>"><%= currUser.username %></a>
+      <a href="/notifications">notifications</a>
+      <a href="/logout">Logout</a>
+    <% } else{%>
+      <a href="/auth/login">login</a>
+      <a href="/auth/signup">signup</a>
+    <% } %>
   </nav>
 </header>
 

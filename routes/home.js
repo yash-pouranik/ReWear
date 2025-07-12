@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Item = require("../models/item");
+const SwapRequest = require("../models/SwapRequest");
 
 
 
@@ -50,6 +51,21 @@ router.post("/items/new", isLoggedin, upload.array("images", 5), async (req, res
   }
 });
 
+router.get("/items/:id/edit", isLoggedin, async (req, res) => {
+  const item = await Item.findById(req.params.id);
+  if (!item) return res.redirect("/");
+
+  if (!item.uploader.equals(req.user._id)) {
+    req.flash("error", "You can't edit this item");
+    return res.redirect("/");
+  }
+
+  res.render("homes/editItem", { item, title: "Edit Item" });
+});
+
+
+
+
 
 router.delete("/delete/item/:id", isLoggedin, async (req, res) => {
   const { id } = req.params;
@@ -69,6 +85,54 @@ router.get("/items/:id", async (req, res) => {
     res.send("Error loading item");
   }
 });
+
+
+
+
+
+router.post("/items/:id/swap", isLoggedin, async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id).populate("uploader");
+    if (!item) {
+      req.flash("error", "Item not found");
+      return res.redirect("/");
+    }
+
+    if (item.uploader.equals(req.user._id)) {
+      req.flash("error", "You cannot swap your own item.");
+      return res.redirect(`/items/${item._id}`);
+    }
+
+    const duplicate = await SwapRequest.findOne({
+      item: item._id,
+      requester: req.user._id,
+      status: "pending"
+    });
+
+    if (duplicate) {
+      req.flash("info", "You already have a pending swap request for this item.");
+      return res.redirect(`/items/${item._id}`);
+    }
+
+    const swap = new SwapRequest({
+      requester: req.user._id,
+      item: item._id,
+      owner: item.uploader._id,
+      status: "pending"
+    });
+
+    await swap.save();
+    req.flash("success", "Swap request sent successfully!");
+    res.redirect("/dashboard");
+    
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Could not send swap request.");
+    res.redirect("/");
+  }
+});
+
+
 
 
 module.exports = router;
