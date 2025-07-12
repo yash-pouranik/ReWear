@@ -11,7 +11,6 @@ const upload = middleware; // default export (upload)
 const { isLoggedin } = middleware; // named export
 
 
-
 // GET /
 router.get("/", (req, res) => {
   res.render("homes/home", { title: ".bitBros" });
