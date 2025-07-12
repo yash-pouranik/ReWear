@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-<<<<<<< HEAD
+
 const Item = require("../models/item");
-=======
+
 
 const middleware = require("../middleware"); // 👈 import file
 const upload = middleware; // default export (upload)
@@ -11,7 +11,7 @@ const Item = require("../models/item");
 
 
 
->>>>>>> 7607671 (added new item route)
+
 // GET /
 router.get("/", (req, res) => {
   res.render("homes/home", { title: ".bitBros" });
