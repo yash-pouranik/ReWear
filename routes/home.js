@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
    });
 });
 
-router.get("/item/new", (req, res) => {
+router.get("/item/new", isLoggedin, (req, res) => {
   res.render("homes/newItem", {title: "reWear"});
 });
 
@@ -42,7 +42,7 @@ router.post("/items/new", isLoggedin, upload.array("images", 5), async (req, res
 
     await item.save();
     req.flash("success", "Item added successfully!");
-    res.redirect("/dashboard");
+    res.redirect("/");
   } catch (err) {
     console.error(err);
     req.flash("error", "Something went wrong while uploading.");
@@ -51,7 +51,7 @@ router.post("/items/new", isLoggedin, upload.array("images", 5), async (req, res
 });
 
 
-router.delete("/delete/item/:id", async (req, res) => {
+router.delete("/delete/item/:id", isLoggedin, async (req, res) => {
   const { id } = req.params;
   await Item.findByIdAndDelete(id);
   req.flash("success", "Item deleted successfully!");
