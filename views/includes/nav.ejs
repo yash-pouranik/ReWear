@@ -106,6 +106,10 @@
     <a href="/">Home</a>
     <a href="/item/new">Add New Item</a>
     <% if(currUser) {%>
+      <% if(currUser.isAdmin) {%>
+      <a class="" href="/admin/<%= currUser._id %>">Manage Users</a>
+
+      <% } %>
       <a class="btn" href="/dashboard/<%= currUser._id %>"><%= currUser.username %></a>
       <a href="/notifications">notifications</a>
       <a href="/logout">Logout</a>
