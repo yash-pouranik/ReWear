@@ -1,0 +1,25 @@
+<% layout('layout/boilerPlate') -%>
+  <style>
+    .card {
+      padding: 20px;
+      max-width: 500px;
+      border-radius: 10px;
+      margin-top:3rem;
+      box-shadow: 0 0 10px #ccc;
+    }
+  </style>
+
+<body>
+  <div class="card">
+    <h2>Welcome, <%= user.username %> 👋</h2>
+
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <p><strong>Points:</strong> <%= user.points %></p>
+    <p><strong>Joined On:</strong> <%= user.createdAt.toDateString() %></p>
+
+    <form action="/logout" method="POST">
+      <button type="submit">Logout</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User=require("./user.js");
+const User=require("../routes/user.js");
 const swapRequestSchema = new mongoose.Schema({
   requester: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   item: { type: mongoose.Schema.Types.ObjectId, ref: "Item" },

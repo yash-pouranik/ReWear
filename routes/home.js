@@ -7,7 +7,7 @@ const Item = require("../models/item");
 const middleware = require("../middleware"); // 👈 import file
 const upload = middleware; // default export (upload)
 const { isLoggedin } = middleware; // named export
-const Item = require("../models/item");
+
 
 
 
