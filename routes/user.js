@@ -117,7 +117,9 @@ router.post("/items/:id/redeem", isLoggedin, async (req, res) => {
   }
 
   if (buyer.points < 50) {
-    return res.send("You don't have enough points.");
+    req.flash("error", "You don't have enough points.")
+    return res.redirect(`/items/${item._id}`);
+
   }
 
   // 10 points = 1 item logic
@@ -132,7 +134,7 @@ router.post("/items/:id/redeem", isLoggedin, async (req, res) => {
   item.status = "swapped";
   await item.save();
 
-  res.redirect("/dashboard");
+  res.redirect("/user/dashboard");
 });
 
 

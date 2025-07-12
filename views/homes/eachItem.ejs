@@ -131,6 +131,20 @@
         <span class="tag-badge">#<%= tag %></span>
       <% }) %>
     </p>
+
+    <% if (item.status === 'swapped') { %>
+      <div class="alert alert-warning" role="alert">
+        ⚠️ This item is already booked.
+      </div>
+    <% } else if (item.status !== 'approved') {  %>
+
+      <div class="alert alert-warning" role="alert">
+        ⚠️ This item is not approved yet. You should avoid buying it.
+      </div>
+    <% } %>
+
+    
+
   </div>
 
   <div class="images">
@@ -145,6 +159,9 @@
     <p><strong>Email:</strong> <%= item.uploader.email %></p>
   </div>
 
+
+
+
   <div class="action-buttons">
     <!-- 📝 Edit/Delete Buttons for Uploader -->
     <% if (currUser && currUser.username === item.uploader.username) { %>
@@ -155,6 +172,9 @@
       <form action="/delete/item/<%= item._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
         <button class="btn btn-delete" type="submit">Delete</button>
       </form>
+
+
+
     
     <!-- 🛒 Buy / Swap Options for Other Users -->
     <% } else if (item.status === 'approved') { %>
