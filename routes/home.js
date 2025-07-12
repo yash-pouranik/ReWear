@@ -66,7 +66,7 @@ router.get("/items/:id/edit", isLoggedin, async (req, res) => {
   const item = await Item.findById(req.params.id);
   if (!item) return res.redirect("/");
 
-  if (!item.uploader.equals(req.user._id)) {
+  if (req.user.isAdmin === false || !item.uploader.equals(req.user._id)) {
     req.flash("error", "You can't edit this item");
     return res.redirect("/");
   }
