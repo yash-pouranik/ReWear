@@ -63,17 +63,28 @@ router.post("/items/new", isLoggedin, upload.array("images", 5), async (req, res
 });
 
 router.get("/items/:id/edit", isLoggedin, async (req, res) => {
-  const item = await Item.findById(req.params.id);
-  if (!item) return res.redirect("/");
+  try {
+    const item = await Item.findById(req.params.id);
+    if (!item) {
+      req.flash("error", "Item not found");
+      return res.redirect("/");
+    }
 
-  if (req.user.isAdmin === false || !item.uploader.equals(req.user._id)) {
-    req.flash("error", "You can't edit this item");
-    return res.redirect("/");
+    const isUploader = item.uploader.equals(req.user._id);
+    const isAdmin = req.user.isAdmin;
+
+    if (!isAdmin && !isUploader) {
+      req.flash("error", "You don't have permission to edit this item");
+      return res.redirect("/");
+    }
+
+    res.render("homes/editItem", { item, title: "Edit Item" });
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong");
+    res.redirect("/");
   }
-
-  res.render("homes/editItem", { item, title: "Edit Item" });
 });
-
 
 router.put("/items/:id/edit", isLoggedin, upload.array("images", 5), async (req, res) => {
   try {
@@ -85,31 +96,33 @@ router.put("/items/:id/edit", isLoggedin, upload.array("images", 5), async (req,
     }
 
     // Permission check
-    if (!item.uploader.equals(req.user._id)) {
+    if (!item.uploader.equals(req.user._id) && !req.user.isAdmin) {
       req.flash("error", "Unauthorized");
       return res.redirect("/");
     }
 
     const { title, description, category, buyType, tags, status } = req.body;
 
-    // Update fields
-    item.title = title;
-    item.description = description;
-    item.category = category;
-    item.buyType = buyType;
-    item.tags = tags.split(",").map(tag => tag.trim());
-    item.status = status;  // ✅ Add this line
+    // Safely update fields if present
+    if (title) item.title = title;
+    if (description) item.description = description;
+    if (category) item.category = category;
+    if (buyType) item.buyType = buyType;
+    if (tags) item.tags = tags.split(",").map(tag => tag.trim());
+    if (status) item.status = status;
 
-    // Handle new images (optional)
-    if (req.files && req.files.length > 0) {
-      item.images = req.files.map(f => `/uploads/${f.filename}`);
-    }
+    // Handle new images
+    if (!item.uploader.equals(req.user._id) && req.user.isAdmin === false) {
+  req.flash("error", "Unauthorized");
+  return res.redirect("/");
+}
+
 
     await item.save();
     req.flash("success", "Item updated successfully!");
     res.redirect(`/items/${id}`);
   } catch (err) {
-    console.error(err);
+    console.error("Error updating item:", err);
     req.flash("error", "Update failed.");
     res.redirect("/");
   }

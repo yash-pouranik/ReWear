@@ -61,12 +61,18 @@
        <!-- Category -->
       <div class="mb-3">
   <label for="status" class="form-label">Status</label>
-  <select name="status" class="form-select" id="status" required>
-    <option value="">Choose status</option>
-    <% ["pending", "approved", "rejected", "swapped", "removed"].forEach(stat => { %>
-      <option value="<%= stat %>" <%= item.status === stat ? "selected" : "" %>><%= stat %></option>
-    <% }) %>
-  </select>
+  <% if(currUser.isAdmin) { %>
+    <select name="status" class="form-select" id="status" required>
+      <option value="">Choose status</option>
+      <% ["pending", "approved", "rejected", "swapped", "removed"].forEach(stat => { %>
+        <option value="<%= stat %>" <%= item.status === stat ? "selected" : "" %>><%= stat %></option>
+      <% }) %>
+    </select>
+  <% } else { %>
+    <div class="alert alert-danger">
+      you cant edit status!
+    </div>
+  <% } %>
   <div class="invalid-feedback">Please select a status.</div>
 </div>
 
